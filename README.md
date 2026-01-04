@@ -1,5 +1,9 @@
 # KubeVirt Config Repository
 
+> 💡 **快速体验**：如果您只是想体验 Demo，可以直接使用此仓库，无需 Fork。
+> 
+> 🔒 **生产环境**：建议将此仓库 **Fork** 到您自己的 GitHub/GitLab 账号并设为 **私有仓库**，或导入到内网 Git 服务器（GitLab CE / Gitea / Gogs）。
+
 ## 概述
 
 本仓库用于管理 KubeVirt Hub 虚拟机的配置模板和环境配置，采用 Git 作为配置管理的核心存储，通过分层结构实现灵活的配置管理。
