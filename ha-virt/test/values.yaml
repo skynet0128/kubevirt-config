@@ -1,0 +1,12 @@
+# 测试环境配置
+app_label: test-app
+color: sky
+cpu_cores: 2
+data_size: 50Gi
+display_name: 测试环境
+env_type: test
+icon: fa-chart-pie
+memory: 4Gi
+rootfs_size: 60Gi
+run_strategy: Always
+sort_order: 20

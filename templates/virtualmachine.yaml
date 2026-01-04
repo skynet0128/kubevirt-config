@@ -1,0 +1,147 @@
+apiVersion: kubevirt.io/v1
+kind: VirtualMachine
+metadata:
+  name: {{ .Values.name }}
+  namespace: {{ .Values.namespace }}
+spec:
+  dataVolumeTemplates:
+  - metadata:
+      name: {{ .Values.name }}-rootfs
+      namespace: {{ .Values.namespace }}
+    spec:
+      pvc:
+        accessModes:
+        - ReadWriteMany
+        resources:
+          requests:
+            storage: {{ .Values.rootfs_size }}
+        {{- if .Values.storage_class_name }}
+        storageClassName: {{ .Values.storage_class_name }}
+        {{- end }}
+        volumeMode: Block
+      source:
+        registry:
+          url: {{ .Values.image_url }}
+  - metadata:
+      name: {{ .Values.name }}-data
+      namespace: {{ .Values.namespace }}
+    spec:
+      pvc:
+        accessModes:
+        - ReadWriteMany
+        resources:
+          requests:
+            storage: {{ .Values.data_size }}
+        {{- if .Values.storage_class_name }}
+        storageClassName: {{ .Values.storage_class_name }}
+        {{- end }}
+        volumeMode: Block
+      source:
+        blank: {}
+  runStrategy: {{ .Values.run_strategy }}
+  template:
+    metadata:
+      annotations:
+        ovn.kubernetes.io/allow_live_migration: 'true'
+        kubevirt.io/allow-pod-bridge-network-live-migration: 'true'
+      labels:
+        app: {{ .Values.app_label }}
+        {{- if .Values.service_name }}
+        service: {{ .Values.service_name }}
+        {{- end }}
+    spec:
+      {{- if .Values.service_name }}
+      # 基于 service_name 的硬反亲和性配置，确保同一服务的 VM 分散到不同宿主机
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchLabels:
+                service: {{ .Values.service_name }}
+            topologyKey: kubernetes.io/hostname
+      {{- else if .Values.affinity }}
+      affinity:
+{{ toYaml .Values.affinity | indent 8 }}
+      {{- end }}
+      {{- if .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.nodeSelector | indent 8 }}
+      {{- end }}
+      {{- if .Values.evictionStrategy }}
+      evictionStrategy: {{ .Values.evictionStrategy }}
+      {{- end }}
+      domain:
+        {{- if .Values.machine }}
+        machine:
+{{ toYaml .Values.machine | indent 10 }}
+        {{- end }}
+        cpu:
+          cores: {{ .Values.cpu_cores }}
+          sockets: 1
+          threads: 1
+          dedicatedCpuPlacement: true
+          isolateEmulatorThread: false
+          model: host-passthrough
+          numa:
+            guestMappingPassthrough: {}
+        memory:
+          hugepages:
+            pageSize: "2Mi"
+        resources:
+          limits:
+            cpu: "{{ .Values.cpu_cores }}"
+            memory: "{{ .Values.memory }}"
+          requests:
+            cpu: "{{ .Values.cpu_cores }}"
+            memory: "{{ .Values.memory }}"
+        devices:
+          autoattachSerialConsole: true
+          autoattachMemBalloon: false
+          autoattachGraphicsDevice: false
+          {{- if hasKey .Values "autoattachVSOCK" }}
+          autoattachVSOCK: {{ .Values.autoattachVSOCK }}
+          {{- else }}
+          autoattachVSOCK: true
+          {{- end }}
+          networkInterfaceMultiqueue: true
+          blockMultiQueue: true
+          rng: {}
+          disks:
+          - disk:
+              bus: virtio
+            name: rootfs
+          - disk:
+              bus: virtio
+            name: {{ .Values.name }}-data
+          {{- if .Values.cloudinit_data }}
+          - disk:
+              bus: virtio
+            name: cloudinitdisk
+          {{- end }}
+          interfaces:
+          - bridge: {}
+            name: default
+            model: virtio
+      livenessProbe:
+        guestAgentPing: {}
+        initialDelaySeconds: 120
+        periodSeconds: 20
+        failureThreshold: 3
+        timeoutSeconds: 5
+      terminationGracePeriodSeconds: 180
+      networks:
+      - name: default
+        pod: {}
+      volumes:
+      - dataVolume:
+          name: {{ .Values.name }}-rootfs
+        name: rootfs
+      - dataVolume:
+          name: {{ .Values.name }}-data
+        name: {{ .Values.name }}-data
+      {{- if .Values.cloudinit_data }}
+      - name: cloudinitdisk
+        cloudInitNoCloud:
+          userData: |
+{{ .Values.cloudinit_data | indent 12 }}
+      {{- end }}

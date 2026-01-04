@@ -1,0 +1,53 @@
+# Default values for kubevirt-hub chart.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# Global configuration
+global:
+  namespace: default
+  environment: dev
+
+# VM basic configuration
+vm:
+  name: ""
+  runStrategy: "Always"
+  appLabel: "kubevirt-app"
+  
+  # CPU and memory configuration
+  cpu:
+    cores: 2
+  memory:
+    guest: "4Gi"
+    
+  # Storage configuration
+  # 注意: storageClassName 从集群配置中获取，不在此处定义
+  storage:
+    rootfs:
+      size: "40Gi"
+      volumeMode: Block
+    data:
+      size: "30Gi"
+      volumeMode: Block
+  
+  # Network configuration
+  network:
+    name: default
+    interfaceType: bridge
+    
+  # Health checks
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 120
+    periodSeconds: 20
+    timeoutSeconds: 10
+    port: 22
+    
+  terminationGracePeriodSeconds: 30
+
+# Default cloud-init configuration (can be overridden per template)
+cloudinit:
+  defaultUser: ubuntu
+  defaultPassword: changeme
+  timezone: Asia/Shanghai
+  packages:
+    - qemu-guest-agent

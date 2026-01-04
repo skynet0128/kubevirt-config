@@ -1,0 +1,12 @@
+# 生产环境配置
+app_label: prod-app
+color: rose
+cpu_cores: 4
+data_size: 100Gi
+display_name: 生产环境
+env_type: prod
+icon: fa-shield-halved
+memory: 8Gi
+rootfs_size: 100Gi
+run_strategy: Always
+sort_order: 50

@@ -1,0 +1,37 @@
+# Fedora Latest 系统模板 (KubeVirt 官方推荐)
+# 适用于功能验证、最新内核特性测试
+template_name: fedora-latest
+description: Fedora Latest - KubeVirt 官方推荐，兼容性最佳
+app_label: fedora-app
+cpu_cores: 2
+memory: 4Gi
+rootfs_size: 30Gi
+data_size: 20Gi
+run_strategy: Always
+image_url: docker://quay.io/containerdisks/fedora:latest
+cloud_init_user: fedora
+cloudinit_data: |
+  #cloud-config
+  hostname: ${hostname}
+  manage_etc_hosts: true
+  ssh_pwauth: true
+  disable_root: false
+  timezone: Asia/Shanghai
+  chpasswd:
+    list: |
+      root:changeme
+      fedora:changeme
+    expire: false
+  users:
+    - name: root
+      lock_passwd: false
+    - name: fedora
+      groups: wheel
+      sudo: ALL=(ALL) NOPASSWD:ALL
+      lock_passwd: false
+  # 自动安装 QEMU Guest Agent (重要：用于获取 VM IP 地址)
+  packages:
+    - qemu-guest-agent
+  runcmd:
+    - systemctl enable --now qemu-guest-agent
+    - echo "Welcome to KubeVirt Hub!" > /etc/motd

@@ -1,0 +1,23 @@
+# CirrOS Demo 系统模板 (轻量级测试镜像)
+# 适用于快速功能验证和 Demo 演示，镜像体积小，启动快
+template_name: cirros-demo
+description: CirrOS Demo - 超轻量级测试镜像，适合快速 Demo
+app_label: demo-app
+cpu_cores: 1
+memory: 512Mi
+rootfs_size: 1Gi
+data_size: 1Gi
+run_strategy: Always
+image_url: docker://quay.io/kubevirt/cirros-container-disk-demo:latest
+cloud_init_user: cirros
+cloudinit_data: |
+  #cloud-config
+  hostname: ${hostname}
+  manage_etc_hosts: true
+  ssh_pwauth: true
+  disable_root: false
+  users:
+    - name: cirros
+      lock_passwd: false
+  runcmd:
+    - echo "Welcome to KubeVirt Hub Demo!" > /etc/motd

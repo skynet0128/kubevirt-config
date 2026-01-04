@@ -1,0 +1,12 @@
+# 开发环境配置
+app_label: dev-app
+color: green
+cpu_cores: 1
+data_size: 50Gi
+display_name: 开发环境
+env_type: test
+icon: fa-desktop
+memory: 2Gi
+rootfs_size: 60Gi
+run_strategy: Always
+sort_order: 10

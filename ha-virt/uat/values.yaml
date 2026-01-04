@@ -1,0 +1,12 @@
+# 预发布环境配置
+app_label: uat-app
+color: orange
+cpu_cores: 2
+data_size: 60Gi
+display_name: 预发布环境
+env_type: test
+icon: fa-layer-group
+memory: 4Gi
+rootfs_size: 80Gi
+run_strategy: Always
+sort_order: 30

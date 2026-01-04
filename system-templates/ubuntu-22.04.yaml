@@ -1,0 +1,37 @@
+# Ubuntu 22.04 LTS 系统模板 (开发者最爱)
+# 适用于通过 cloud-init 安装大量软件的场景
+template_name: ubuntu-22.04
+description: Ubuntu 22.04 LTS (Jammy) - 开发者首选，软件包丰富
+app_label: ubuntu-app
+cpu_cores: 2
+memory: 4Gi
+rootfs_size: 40Gi
+data_size: 30Gi
+run_strategy: Always
+image_url: docker://quay.io/containerdisks/ubuntu:22.04
+cloud_init_user: ubuntu
+cloudinit_data: |
+  #cloud-config
+  hostname: ${hostname}
+  manage_etc_hosts: true
+  ssh_pwauth: true
+  disable_root: false
+  timezone: Asia/Shanghai
+  chpasswd:
+    list: |
+      root:changeme
+      ubuntu:changeme
+    expire: false
+  users:
+    - name: root
+      lock_passwd: false
+    - name: ubuntu
+      groups: sudo
+      sudo: ALL=(ALL) NOPASSWD:ALL
+      lock_passwd: false
+  # 自动安装 QEMU Guest Agent (重要：用于获取 VM IP 地址)
+  packages:
+    - qemu-guest-agent
+  runcmd:
+    - systemctl enable --now qemu-guest-agent
+    - echo "Welcome to KubeVirt Hub!" > /etc/motd
