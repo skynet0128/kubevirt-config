@@ -1,15 +1,15 @@
 apiVersion: v2
-name: kubevirt-hub
-description: A Helm chart for KubeVirt VMs in KubeVirt Hub
+name: kubevirt-shepherd
+description: A Helm chart for KubeVirt VMs in KubeVirt Shepherd
 type: application
 version: 0.1.0
 appVersion: "1.0.0"
 maintainers:
-  - name: KubeVirt Hub Team
-    email: kubevirt-hub@example.com
-home: https://github.com/your-org/kubevirt-hub
+  - name: KubeVirt Shepherd Team
+    email: kubevirt-shepherd@example.com
+home: https://github.com/your-org/kubevirt-shepherd
 sources:
-  - https://github.com/your-org/kubevirt-hub
+  - https://github.com/your-org/kubevirt-shepherd
 keywords:
   - kubevirt
   - vm

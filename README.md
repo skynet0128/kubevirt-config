@@ -8,7 +8,7 @@
 
 ## Overview
 
-This repository is used to manage configuration templates and environment configurations for KubeVirt Hub virtual machines. It uses Git as the core storage for configuration management and achieves flexible configuration management through a layered structure.
+This repository is used to manage configuration templates and environment configurations for KubeVirt Shepherd virtual machines. It uses Git as the core storage for configuration management and achieves flexible configuration management through a layered structure.
 
 It now supports using the Helm template engine to generate standard KubeVirt VM YAML manifests.
 
@@ -161,7 +161,7 @@ helm template vm-release .
    ```
 
 2. **Configure StorageClass**:
-   StorageClass is obtained from the cluster configuration, set in KubeVirt Hub System Configuration -> Cluster Management.
+   StorageClass is obtained from the cluster configuration, set in KubeVirt Shepherd System Configuration -> Cluster Management.
    If not configured, the Kubernetes cluster's default StorageClass will be used.
    
    Common StorageClasses:

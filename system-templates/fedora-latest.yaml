@@ -34,4 +34,4 @@ cloudinit_data: |
     - qemu-guest-agent
   runcmd:
     - systemctl enable --now qemu-guest-agent
-    - echo "Welcome to KubeVirt Hub!" > /etc/motd
+    - echo "Welcome to KubeVirt Shepherd!" > /etc/motd

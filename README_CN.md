@@ -6,7 +6,7 @@
 
 ## 概述
 
-本仓库用于管理 KubeVirt Hub 虚拟机的配置模板和环境配置，采用 Git 作为配置管理的核心存储，通过分层结构实现灵活的配置管理。
+本仓库用于管理 KubeVirt Shepherd 虚拟机的配置模板和环境配置，采用 Git 作为配置管理的核心存储，通过分层结构实现灵活的配置管理。
 
 现在支持使用 Helm 模板引擎来生成标准的 KubeVirt VM YAML 清单。
 
@@ -159,7 +159,7 @@ helm template vm-release . \
    ```
 
 2. **配置 StorageClass**:
-   StorageClass 从集群配置获取，在 KubeVirt Hub 系统配置 → 集群管理中设置。
+   StorageClass 从集群配置获取，在 KubeVirt Shepherd 系统配置 → 集群管理中设置。
    如果不配置，将使用 Kubernetes 集群的默认 StorageClass。
    
    常见的 StorageClass：

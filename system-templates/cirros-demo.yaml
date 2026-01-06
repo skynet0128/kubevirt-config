@@ -20,4 +20,4 @@ cloudinit_data: |
     - name: cirros
       lock_passwd: false
   runcmd:
-    - echo "Welcome to KubeVirt Hub Demo!" > /etc/motd
+    - echo "Welcome to KubeVirt Shepherd Demo!" > /etc/motd
